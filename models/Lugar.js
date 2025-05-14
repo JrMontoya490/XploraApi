@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const lugarSchema = new mongoose.Schema({
-    _id: String = "",
     nombre: String,
     pais: String,
     ciudad: String,
