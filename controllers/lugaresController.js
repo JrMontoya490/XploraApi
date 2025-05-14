@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Lugar = require("../models/Lugar");
 
 // Obtener todos los lugares
@@ -23,13 +24,21 @@ const crearLugar = async (req, res) => {
     }
 };
 
-// Obtener un lugar por ID
+// ✅ Obtener un lugar por ID (con validación de formato)
 const obtenerLugarPorId = async (req, res) => {
     try {
-        const lugar = await Lugar.findById(req.params.id);
+        const { id } = req.params;
+
+        // Validar si es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: "ID inválido" });
+        }
+
+        const lugar = await Lugar.findById(id);
         if (!lugar) {
             return res.status(404).json({ error: "Lugar no encontrado" });
         }
+
         res.json(lugar);
     } catch (error) {
         console.error("❌ Error al obtener lugar:", error.message);
